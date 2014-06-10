@@ -12,6 +12,13 @@ import java.util.List;
 
 import android.util.Log;
 import com.napontaratan.BusApp.model.Location;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.HttpResponseException;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
@@ -37,6 +44,10 @@ public class ServerConnection {
         return instance;
     }
 
+    public List<Location> getLocations() {
+        return locations;
+    }
+
     public List<Location> parseJSONLocationData(String response){
         try {
             JSONTokener raw 	    = new JSONTokener(response);
@@ -47,12 +58,15 @@ public class ServerConnection {
 
             JSONObject obj = (JSONObject) jsonObject.getJSONArray("results").get(0);
             String address = obj.getString("formatted_address");
-            JSONObject location = obj.getJSONObject("location");
+            System.out.println(address);
+            JSONObject location = obj.getJSONObject("geometry").getJSONObject("location");
+
             double lat = location.getDouble("lat");
-            double lon = location.getDouble("lon");
+            double lon = location.getDouble("lng");
 
             Location newLocation = new Location(address, lat, lon);
             locations.add(newLocation);
+
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -60,46 +74,25 @@ public class ServerConnection {
         return locations;
     }
 
-
-
-    /**
-     * Creates an HTTP request to the server and returns the server's response
-     *
-     * @param server - url of request
-     * @author Napon Taratan
-     */
     public String makeJSONQuery(String server) {
-        URL url = null;
-        HttpURLConnection client = null;
-        InputStream in = null;
-        BufferedReader br = null;
+
+        String responseString = null;
+        System.out.println(server);
 
         try {
-            url = new URL(server);
             Log.d("makeJSONQuery", "make JSON query to server");
-            client = (HttpURLConnection) url.openConnection();
-
-            in = client.getInputStream();
-            br = new BufferedReader(
-                    new InputStreamReader(in));
-            String r;
-            while ((r = br.readLine()) != null) {
-                System.out.println(r);
-            }
-            Log.d("makeJSONQuery", "Return: " + r);
-            return r;
-
+            HttpClient httpClient = new DefaultHttpClient();
+            HttpResponse response = httpClient.execute(new HttpGet(server));
+            responseString = new BasicResponseHandler().handleResponse(response);
+            System.out.println(responseString);
+        } catch (HttpResponseException e) {
+            e.printStackTrace();
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            client.disconnect();
-            try {
-                br.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
 
-        return "";
+        return responseString;
     }
 }

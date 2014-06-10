@@ -3,6 +3,7 @@ package com.napontaratan.BusApp;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -116,6 +117,8 @@ public class MainPage extends Activity{
                 Toast.makeText(getApplicationContext(), "Number of locations: " + locations.size(), Toast.LENGTH_LONG).show();
 
             //dialog.dismiss();
+
+            startActivity(new Intent("com.napontaratan.SELECTION"));
         }
 
     }

@@ -15,6 +15,8 @@ public class Location {
         this.lon = lon;
     }
 
+    public String getName() { return this.name; }
+
     public double getLatitude() {
         return this.lat;
     }
