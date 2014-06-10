@@ -1,16 +1,15 @@
 package com.napontaratan.BusApp.controller;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.io.StringReader;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
 import android.util.Log;
+import com.napontaratan.BusApp.model.BusStop;
 import com.napontaratan.BusApp.model.Location;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -19,8 +18,13 @@ import org.apache.http.client.HttpResponseException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.*;
 
 /**
  * Establish connection with the remote server for
@@ -33,7 +37,8 @@ public class ServerConnection {
 
     private static ServerConnection instance = null;
 
-    final List<Location> locations = new ArrayList<Location>();
+    private List<Location> locations = new ArrayList<Location>();
+    private List<BusStop> bStops = new ArrayList<BusStop>();
 
     // allow only one instance of WiFinderServerConnection
     private ServerConnection() {}
@@ -47,31 +52,54 @@ public class ServerConnection {
     public List<Location> getLocations() {
         return locations;
     }
+    public List<BusStop> getStops() { return bStops; }
+
+    public void clearLocationCache() { locations = new ArrayList<Location>();}
 
     public List<Location> parseJSONLocationData(String response){
         try {
             JSONTokener raw 	    = new JSONTokener(response);
             JSONObject jsonObject	= new JSONObject(raw);
             String status = jsonObject.getString("status");
+            System.out.print("status: " + status);
 
             if(!status.equals("OK")) return null;
 
-            JSONObject obj = (JSONObject) jsonObject.getJSONArray("results").get(0);
-            String address = obj.getString("formatted_address");
-            System.out.println(address);
-            JSONObject location = obj.getJSONObject("geometry").getJSONObject("location");
+            JSONArray results = jsonObject.getJSONArray("results");
+            for(int i = 0; i < results.length(); i++) {
+                JSONObject obj = (JSONObject) results.get(i);
+                String address = obj.getString("formatted_address");
+                System.out.println(address);
+                JSONObject location = obj.getJSONObject("geometry").getJSONObject("location");
 
-            double lat = location.getDouble("lat");
-            double lon = location.getDouble("lng");
+                double lat = round(location.getDouble("lat"), 6);
+                double lon = round(location.getDouble("lng"), 6);
 
-            Location newLocation = new Location(address, lat, lon);
-            locations.add(newLocation);
+                Location newLocation = new Location(address, lat, lon);
+                locations.add(newLocation);
+            }
 
         } catch(Exception e) {
             e.printStackTrace();
         }
 
         return locations;
+    }
+
+    public List<BusStop> parseXMLBusStopData(String xml) {
+        SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+        try {
+            SAXParser saxParser = saxParserFactory.newSAXParser();
+            BusStopHandler handler = new BusStopHandler(bStops);
+            saxParser.parse(new InputSource(new StringReader(xml)), handler);
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bStops;
     }
 
     public String makeJSONQuery(String server) {
@@ -94,5 +122,13 @@ public class ServerConnection {
         }
 
         return responseString;
+    }
+
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 }

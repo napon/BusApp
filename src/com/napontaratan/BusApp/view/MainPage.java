@@ -1,4 +1,4 @@
-package com.napontaratan.BusApp;
+package com.napontaratan.BusApp.view;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -6,12 +6,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
+import com.napontaratan.BusApp.R;
 import com.napontaratan.BusApp.controller.ServerConnection;
 import com.napontaratan.BusApp.model.Location;
 
@@ -31,6 +33,9 @@ public class MainPage extends Activity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.main);
 
         // Search query input
@@ -51,8 +56,8 @@ public class MainPage extends Activity{
 
             @Override
             public void onClick(View v) {
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(searchInput, InputMethodManager.SHOW_IMPLICIT);
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
                 searchInput.setCursorVisible(false);
 
                 String locationQuery = searchInput.getText().toString();
@@ -73,7 +78,7 @@ public class MainPage extends Activity{
                 if(actionId ==  EditorInfo.IME_ACTION_DONE){ // user presses 'done' button
                     locationQuery = v.getText().toString();
                     if(!locationQuery.isEmpty())
-                        new GeocodeTask(getApplicationContext()).execute(locationQuery);
+                        new GeocodeTask(cxt).execute(locationQuery);
                     else Toast.makeText(getApplicationContext(), "Enter your destination", Toast.LENGTH_SHORT).show();
                 }
                 searchInput.setCursorVisible(false);
@@ -82,10 +87,6 @@ public class MainPage extends Activity{
         });
     }
 
-    /**
-     * Geocode address using Google Geocoding API
-     * @author daniel
-     */
     private class GeocodeTask extends AsyncTask<String, Void, List<Location>> {
 
         private ProgressDialog dialog;
@@ -98,28 +99,27 @@ public class MainPage extends Activity{
 
         @Override
         protected void onPreExecute() {
-//            dialog.setMessage("Finding near by bus stops..");
-//            dialog.show();
-            Log.d("onPreExecute", "dialog should show up now");
+            dialog.setMessage("Finding matching locations..");
+            dialog.show();
+            if(server.getLocations()!=null) {
+                server.clearLocationCache();
+            }
         }
 
         @Override
         protected List<Location> doInBackground(String... locationName) {
-            String query = server.makeJSONQuery("http://maps.googleapis.com/maps/api/geocode/json?address=" + locationName[0] + "&key=" + API_KEY);
+            String request = locationName[0].replace(' ', '+');
+            String query = server.makeJSONQuery("https://maps.googleapis.com/maps/api/place/textsearch/json?query=" + request + "&sensor=true&key=" + API_KEY);
             return server.parseJSONLocationData(query);
         }
 
         @Override
         protected void onPostExecute(List <Location> locations) {
-            if(locations.size() == 0)
+            dialog.hide();
+            if(locations == null)
                 Toast.makeText(getApplicationContext(), "No location found", Toast.LENGTH_SHORT).show();
             else
-                Toast.makeText(getApplicationContext(), "Number of locations: " + locations.size(), Toast.LENGTH_LONG).show();
-
-            //dialog.dismiss();
-
-            startActivity(new Intent("com.napontaratan.SELECTION"));
+                startActivity(new Intent("com.napontaratan.SELECTION"));
         }
-
     }
 }

@@ -10,7 +10,7 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyA_EL07LXoIEIpQtRcPY-ZScc33MpSPRKg"/>
 
-        <activity android:name=".Splash"
+        <activity android:name=".view.Splash"
                   android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -18,7 +18,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".MainPage"
+        <activity android:name=".view.MainPage"
                   android:label="@string/app_name">
             <intent-filter>
                 <action android:name="com.napontaratan.CLEARSCREEN" />
@@ -26,7 +26,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".SelectionPage"
+        <activity android:name=".view.AddressSelectionPage"
                   android:label="@string/app_name">
             <intent-filter>
                 <action android:name="com.napontaratan.SELECTION" />
