@@ -54,11 +54,9 @@ public class AddressSelectionPage extends ListActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 view.setSelected(true);
-                //Toast.makeText(getApplicationContext(), listItems.get(position) + ": lat=" + locations.get(position).getLatitude() + " lon=" + locations.get(position).getLongitude(), Toast.LENGTH_SHORT).show();
                 Location loc = locations.get(position);
                 latitude = String.valueOf(loc.getLatitude());
                 longitude = String.valueOf(loc.getLongitude());
-                //new GeocodeTask(cxt).execute(lat,lon);
             }
         });
 
@@ -90,6 +88,9 @@ public class AddressSelectionPage extends ListActivity {
         protected void onPreExecute() {
             dialog.setMessage("Finding bus stops..");
             dialog.show();
+            if(server.getStops()!=null) {
+                server.clearStopCache();
+            }
         }
 
         @Override

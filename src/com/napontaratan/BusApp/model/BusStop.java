@@ -25,6 +25,10 @@ public class BusStop {
         return stopNumber;
     }
 
+    public String getStopName() {
+        return stopName;
+    }
+
     public List<Integer> getBuses() {
         return buses;
     }

@@ -55,6 +55,7 @@ public class ServerConnection {
     public List<BusStop> getStops() { return bStops; }
 
     public void clearLocationCache() { locations = new ArrayList<Location>();}
+    public void clearStopCache() { bStops = new ArrayList<BusStop>(); }
 
     public List<Location> parseJSONLocationData(String response){
         try {

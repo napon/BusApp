@@ -12,7 +12,8 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-sdk android:minSdkVersion="19"/>
-    <application android:label="@string/app_name" android:icon="@drawable/ic_launcher">
+    <application android:label="@string/app_name"
+                 android:icon="@drawable/ic_launcher">
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyA_EL07LXoIEIpQtRcPY-ZScc33MpSPRKg"/>
