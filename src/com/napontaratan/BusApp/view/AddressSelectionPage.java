@@ -3,6 +3,7 @@ package com.napontaratan.BusApp.view;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -78,6 +79,7 @@ public class AddressSelectionPage extends ListActivity {
 
         private ProgressDialog dialog;
         private ServerConnection server;
+        private String[] destination = new String[2];
 
         public GeocodeTask(Context cxt) {
             dialog = new ProgressDialog(cxt);
@@ -92,6 +94,8 @@ public class AddressSelectionPage extends ListActivity {
 
         @Override
         protected List<BusStop> doInBackground(String... geo) {
+            destination[0] = geo[0];
+            destination[1] = geo[1];
             String query = server.makeJSONQuery("http://api.translink.ca/rttiapi/v1/stops?apikey=" + API_KEY + "&lat=" + geo[0] + "&long=" + geo[1] + "&routeNo=" + geo[2] + "&radius=1000");
             return server.parseXMLBusStopData(query);
         }
@@ -99,8 +103,12 @@ public class AddressSelectionPage extends ListActivity {
         @Override
         protected void onPostExecute(List <BusStop> stops) {
             dialog.hide();
-            if(stops != null)
+            if(stops != null) {
                 Toast.makeText(getApplicationContext(), "succeeded: size is " + stops.size(), Toast.LENGTH_SHORT).show();
+                Intent map = new Intent("com.napontaratan.MAP");
+                map.putExtra("destination", destination);
+                startActivity(map);
+            }
         }
     }
 

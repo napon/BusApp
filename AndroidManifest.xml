@@ -3,15 +3,30 @@
           package="com.napontaratan.BusApp"
           android:versionCode="1"
           android:versionName="1.0">
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-feature
+            android:glEsVersion="0x00020000"
+            android:required="true"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-sdk android:minSdkVersion="19"/>
     <application android:label="@string/app_name" android:icon="@drawable/ic_launcher">
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyA_EL07LXoIEIpQtRcPY-ZScc33MpSPRKg"/>
 
+        <meta-data
+                android:name="com.google.android.gms.version"
+                android:value="4323000" />
+        <meta-data
+                android:name="com.google.android.maps.v2.API_KEY"
+                android:value="AIzaSyBqRSr4xJ3MdaRd7t-bR7BmL6UEbYkKw7g"/>
+
         <activity android:name=".view.Splash"
-                  android:label="@string/app_name">
+                  android:label="@string/app_name"
+                  android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -19,7 +34,8 @@
         </activity>
 
         <activity android:name=".view.MainPage"
-                  android:label="@string/app_name">
+                  android:label="@string/app_name"
+                  android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="com.napontaratan.CLEARSCREEN" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -27,9 +43,19 @@
         </activity>
 
         <activity android:name=".view.AddressSelectionPage"
-                  android:label="@string/app_name">
+                  android:label="@string/app_name"
+                  android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="com.napontaratan.SELECTION" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".view.MapView"
+                  android:label="Pick your stop"
+                  android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="com.napontaratan.MAP" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
