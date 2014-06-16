@@ -20,7 +20,7 @@ import com.napontaratan.BusApp.model.Location;
 import java.util.List;
 
 /**
- * Created by napontaratan on 2014-06-09.
+ * Created by Napon Taratan on 2014-06-09.
  */
 public class MainPage extends Activity{
 
@@ -32,7 +32,7 @@ public class MainPage extends Activity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onCreate(null);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);

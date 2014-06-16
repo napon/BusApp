@@ -8,7 +8,7 @@ import android.view.WindowManager;
 import com.napontaratan.BusApp.R;
 
 /**
- * Created by napontaratan on 2014-06-09.
+ * Created by Napon Taratan on 2014-06-09.
  */
 public class Splash extends Activity {
     /**
@@ -16,7 +16,7 @@ public class Splash extends Activity {
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onCreate(null);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);

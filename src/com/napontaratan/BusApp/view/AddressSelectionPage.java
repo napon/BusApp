@@ -6,9 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.*;
 import com.napontaratan.BusApp.R;
 import com.napontaratan.BusApp.controller.ServerConnection;
@@ -19,7 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by napontaratan on 2014-06-09.
+ * Created by Napon Taratan on 2014-06-09.
  */
 public class AddressSelectionPage extends ListActivity {
 
@@ -34,7 +36,7 @@ public class AddressSelectionPage extends ListActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onCreate(null);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -60,12 +62,25 @@ public class AddressSelectionPage extends ListActivity {
             }
         });
 
+        final EditText busBox = (EditText) findViewById(R.id.bus_stop);
+        busBox.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(actionId == EditorInfo.IME_ACTION_DONE){
+                    String userInput = busBox.getText().toString();
+                    if(userInput.isEmpty())
+                        Toast.makeText(getApplicationContext(), "Enter a bus number", Toast.LENGTH_SHORT);
+                    else
+                        new GeocodeTask(cxt).execute(latitude, longitude, userInput);
+                }
+                return false;
+            }
+        });
         Button submit = (Button) findViewById(R.id.submit);
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText searchInput = (EditText) findViewById(R.id.bus_stop);
-                String userInput = searchInput.getText().toString();
+                String userInput = busBox.getText().toString();
                 if(userInput.isEmpty()) Toast.makeText(getApplicationContext(), "Enter a bus number", Toast.LENGTH_SHORT);
                 else new GeocodeTask(cxt).execute(latitude,longitude,userInput);
             }

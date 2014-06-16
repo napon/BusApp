@@ -3,7 +3,7 @@ package com.napontaratan.BusApp.model;
 import java.util.List;
 
 /**
- * Created by napontaratan on 2014-06-10.
+ * Created by Napon Taratan on 2014-06-10.
  */
 public class BusStop {
 

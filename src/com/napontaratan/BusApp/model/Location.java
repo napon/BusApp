@@ -1,7 +1,7 @@
 package com.napontaratan.BusApp.model;
 
 /**
- * Created by napontaratan on 2014-06-09.
+ * Created by Napon Taratan on 2014-06-09.
  */
 public class Location {
 
