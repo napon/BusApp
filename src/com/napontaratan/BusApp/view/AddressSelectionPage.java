@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import com.napontaratan.BusApp.R;
 import com.napontaratan.BusApp.controller.ServerConnection;
@@ -32,7 +33,6 @@ public class AddressSelectionPage extends ListActivity {
 
     private String latitude;
     private String longitude;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -69,7 +69,7 @@ public class AddressSelectionPage extends ListActivity {
                 if(actionId == EditorInfo.IME_ACTION_DONE){
                     String userInput = busBox.getText().toString();
                     if(userInput.isEmpty())
-                        Toast.makeText(getApplicationContext(), "Enter a bus number", Toast.LENGTH_SHORT);
+                        Toast.makeText(getApplicationContext(), "Enter a bus number", Toast.LENGTH_SHORT).show();
                     else
                         new GeocodeTask(cxt).execute(latitude, longitude, userInput);
                 }
@@ -80,8 +80,10 @@ public class AddressSelectionPage extends ListActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
                 String userInput = busBox.getText().toString();
-                if(userInput.isEmpty()) Toast.makeText(getApplicationContext(), "Enter a bus number", Toast.LENGTH_SHORT);
+                if(userInput.isEmpty()) Toast.makeText(getApplicationContext(), "Enter a bus number", Toast.LENGTH_SHORT).show();
                 else new GeocodeTask(cxt).execute(latitude,longitude,userInput);
             }
         });
@@ -113,20 +115,20 @@ public class AddressSelectionPage extends ListActivity {
             destination[0] = geo[0];
             destination[1] = geo[1];
             String query = server.makeJSONQuery("http://api.translink.ca/rttiapi/v1/stops?apikey=" + API_KEY + "&lat=" + geo[0] + "&long=" + geo[1] + "&routeNo=" + geo[2] + "&radius=1000");
-            return server.parseXMLBusStopData(query);
+            return query==null? null : server.parseXMLBusStopData(query);
         }
 
         @Override
         protected void onPostExecute(List <BusStop> stops) {
             dialog.hide();
-            if(stops != null) {
+            if(stops != null && stops.size() != 0) {
                 Toast.makeText(getApplicationContext(), "succeeded: size is " + stops.size(), Toast.LENGTH_SHORT).show();
                 Intent map = new Intent("com.napontaratan.MAP");
                 map.putExtra("destination", destination);
                 startActivity(map);
+            } else {
+                Toast.makeText(getApplicationContext(), "No bus stops found in that area", Toast.LENGTH_SHORT).show();
             }
         }
     }
-
-
 }

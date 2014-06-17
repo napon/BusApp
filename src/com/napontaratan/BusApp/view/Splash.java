@@ -13,6 +13,7 @@ import com.napontaratan.BusApp.R;
 public class Splash extends Activity {
     /**
      * Called when the activity is first created.
+     * Created by Napon Taratan on 2014-06-09.
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -31,14 +32,9 @@ public class Splash extends Activity {
                         logoTimer = logoTimer +100;
                     };
                     startActivity(new Intent("com.napontaratan.CLEARSCREEN"));
-                }
-
-                catch (InterruptedException e) {
-                    // TODO Auto-generated catch block
+                } catch (InterruptedException e) {
                     e.printStackTrace();
-                }
-
-                finally{
+                } finally{
                     finish();
                 }
             }

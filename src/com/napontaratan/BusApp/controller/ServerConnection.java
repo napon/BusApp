@@ -27,11 +27,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.*;
 
 /**
- * Establish connection with the remote server for
- * - fetch wifi points
- * - push new wifi points
- *
- * @author Napon Taratan
+ * Created by Napon Taratan on 2014-06-09.
  */
 public class ServerConnection {
 
@@ -116,6 +112,7 @@ public class ServerConnection {
             System.out.println(responseString);
         } catch (HttpResponseException e) {
             e.printStackTrace();
+            return null;
         } catch (ClientProtocolException e) {
             e.printStackTrace();
         } catch (IOException e) {

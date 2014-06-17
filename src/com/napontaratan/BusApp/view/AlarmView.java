@@ -18,7 +18,6 @@ public class AlarmView extends Activity {
     @Override
     public void onCreate(Bundle onSavedState){
         super.onCreate(null);
-
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);

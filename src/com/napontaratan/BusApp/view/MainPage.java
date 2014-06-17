@@ -24,7 +24,6 @@ import java.util.List;
  */
 public class MainPage extends Activity{
 
-
     private EditText searchInput;
     private ImageButton searchButton;
     private final Context cxt = this;

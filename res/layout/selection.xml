@@ -29,7 +29,7 @@
             android:dividerHeight="1dp"
             android:listSelector="@color/grey"
             android:visibility="visible"
-            android:background="@color/white"
+            android:background="@drawable/rounded_corners"
             android:layout_below="@+id/selection_title"
             android:layout_alignParentBottom="true"/>
 
