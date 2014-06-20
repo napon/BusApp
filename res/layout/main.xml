@@ -53,5 +53,15 @@
                 android:src="@drawable/search_icon" android:layout_alignTop="@+id/search_query"
                 android:layout_alignEnd="@+id/search_query"/>
 
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+      		android:layout_centerHorizontal="true"
+            android:layout_below="@+id/search_query"
+			android:layout_alignStart="@+id/search_query"
+			android:layout_alignEnd="@+id/search_query"
+            android:src="@drawable/one" />
+
 </RelativeLayout>
 
