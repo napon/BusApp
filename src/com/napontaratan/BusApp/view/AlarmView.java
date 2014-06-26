@@ -3,6 +3,7 @@ package com.napontaratan.BusApp.view;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.os.Vibrator;
 import android.view.View;
 import android.view.Window;
@@ -18,6 +19,13 @@ public class AlarmView extends Activity {
     @Override
     public void onCreate(Bundle onSavedState){
         super.onCreate(null);
+
+        // Set the window to keep screen on
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);

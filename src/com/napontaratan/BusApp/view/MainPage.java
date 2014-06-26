@@ -14,6 +14,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
 import com.napontaratan.BusApp.R;
+import com.napontaratan.BusApp.controller.BusLocationController;
 import com.napontaratan.BusApp.controller.ServerConnection;
 import com.napontaratan.BusApp.model.Location;
 
@@ -27,6 +28,7 @@ public class MainPage extends Activity{
     private EditText searchInput;
     private ImageButton searchButton;
     private final Context cxt = this;
+    private BusLocationController controller;
     private final String API_KEY = "";
 
     @Override
@@ -36,6 +38,9 @@ public class MainPage extends Activity{
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.main);
+
+        controller = new BusLocationController(cxt);
+        controller.stopListening();
 
         // Search query input
         searchInput = (EditText) findViewById(R.id.search_query);

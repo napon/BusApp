@@ -2,11 +2,8 @@ package com.napontaratan.BusApp.view;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -17,7 +14,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.napontaratan.BusApp.R;
-import com.napontaratan.BusApp.controller.AlarmReceiver;
+import com.napontaratan.BusApp.controller.BusLocationController;
 import com.napontaratan.BusApp.controller.ServerConnection;
 import com.napontaratan.BusApp.model.BusStop;
 
@@ -31,7 +28,7 @@ public class MapView extends Activity {
 
     private GoogleMap map;
     private MapFragment mapFragment;
-    private LocationManager locationManager;
+    private BusLocationController controller;
     private List<BusStop> stops = new ArrayList<BusStop>();
     private final Context cxt = this;
 
@@ -39,7 +36,7 @@ public class MapView extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(null);
         setContentView(R.layout.mapview);
-        locationManager = (LocationManager) cxt.getSystemService(Context.LOCATION_SERVICE);
+        controller = new BusLocationController(cxt);
 
         if(map == null){
             setupMap();
@@ -79,7 +76,7 @@ public class MapView extends Activity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     Toast.makeText(cxt, name + ": " + lat + ", " + lon, Toast.LENGTH_SHORT).show();
-                    setAlarm(name, lat, lon);
+                    controller.startListening(lat, lon, name);
                 }
             })
             .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -102,15 +99,5 @@ public class MapView extends Activity {
     private void setupMap(){
         mapFragment= ((MapFragment) getFragmentManager().findFragmentById(R.id.map));
         map = mapFragment.getMap();
-    }
-
-    private void setAlarm(String location_name, double lat, double lon){
-
-        Intent intent = new Intent(getApplicationContext(), AlarmReceiver.class);
-        intent.putExtra("location_name", location_name);
-        PendingIntent pi = PendingIntent.getBroadcast(getApplicationContext(), 1, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-        locationManager.addProximityAlert(lat,lon, 500, -1, pi);
-        System.out.println("AlarmReceiver set!");
-
     }
 }

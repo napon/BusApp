@@ -19,7 +19,7 @@
                 android:id="@+id/search_query"
                 android:layout_width="0dip"
                 android:layout_height="40dip"
-                android:hint="Stop number or Destination"
+                android:hint="Enter a destination"
                 android:textSize="8pt"
                 android:layout_alignStart="@+id/question1"
                 android:layout_alignEnd="@+id/question1"
