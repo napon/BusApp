@@ -110,13 +110,9 @@ public class ServerConnection {
             HttpResponse response = httpClient.execute(new HttpGet(server));
             responseString = new BasicResponseHandler().handleResponse(response);
             System.out.println(responseString);
-        } catch (HttpResponseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
         return responseString;

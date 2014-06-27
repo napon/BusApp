@@ -1,8 +1,10 @@
 package com.napontaratan.BusApp.view;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -40,7 +42,9 @@ public class MainPage extends Activity{
         setContentView(R.layout.main);
 
         controller = new BusLocationController(cxt);
-        controller.stopListening();
+        if(controller.isActive()) {
+            disableAlarmDialog();
+        }
 
         // Search query input
         searchInput = (EditText) findViewById(R.id.search_query);
@@ -91,6 +95,26 @@ public class MainPage extends Activity{
         });
     }
 
+    private void disableAlarmDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(cxt)
+                .setTitle("Pending alarm found")
+                .setMessage("Do you want to remove the pending alarm?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        controller.stopListening();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
     private class GeocodeTask extends AsyncTask<String, Void, List<Location>> {
 
         private ProgressDialog dialog;
@@ -113,15 +137,15 @@ public class MainPage extends Activity{
         @Override
         protected List<Location> doInBackground(String... locationName) {
             String request = locationName[0].replace(' ', '+');
-            String query = server.makeJSONQuery("https://maps.googleapis.com/maps/api/place/textsearch/json?query=" + request + "&sensor=true&key=" + API_KEY);
+            String query = server.makeJSONQuery("https://maps.googleapis.com/maps/api/geocode/json?address=" + request + "&region=ca&key=" + API_KEY);
             return server.parseJSONLocationData(query);
         }
 
         @Override
         protected void onPostExecute(List <Location> locations) {
             dialog.hide();
-            if(locations == null)
-                Toast.makeText(getApplicationContext(), "No location found", Toast.LENGTH_SHORT).show();
+            if(locations == null || locations.size() == 0)
+                Toast.makeText(getApplicationContext(), "No location found. Please make sure an internet connection is available and the address is correct.", Toast.LENGTH_SHORT).show();
             else
                 startActivity(new Intent("com.napontaratan.SELECTION"));
         }

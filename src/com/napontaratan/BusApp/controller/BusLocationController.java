@@ -30,7 +30,7 @@ public class BusLocationController {
     public void startListening(final double destination_lat, final double destination_lon, final String location_name) {
         stopListening();
         listener = new BusLocationListener( destination_lat, destination_lon, location_name);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000, 100, listener);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 100, listener);
         activated = true;
     }
 
@@ -74,6 +74,7 @@ public class BusLocationController {
                 final PendingIntent pi = PendingIntent.getBroadcast(context, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                 alarmManager.set(AlarmManager.RTC_WAKEUP, 1, pi);
             }
+
         }
 
         @Override

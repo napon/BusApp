@@ -4,6 +4,7 @@ import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -33,6 +34,7 @@ public class AddressSelectionPage extends ListActivity {
 
     private String latitude;
     private String longitude;
+    private boolean address_selected = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,7 @@ public class AddressSelectionPage extends ListActivity {
 
         ServerConnection server = ServerConnection.getInstance();
         final List<Location> locations = server.getLocations();
+
         for(Location loc : locations) {
             listItems.add(loc.getName());
         }
@@ -55,7 +58,13 @@ public class AddressSelectionPage extends ListActivity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                view.setSelected(true);
+                for(int i = 0; i < parent.getCount(); i++){
+                    View v = parent.getChildAt(i);
+                    v.setBackgroundColor(Color.WHITE);
+                }
+
+                address_selected = true;
+                view.setBackgroundColor(Color.GRAY);
                 Location loc = locations.get(position);
                 latitude = String.valueOf(loc.getLatitude());
                 longitude = String.valueOf(loc.getLongitude());
@@ -64,18 +73,31 @@ public class AddressSelectionPage extends ListActivity {
 
         final EditText busBox = (EditText) findViewById(R.id.bus_stop);
         busBox.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+
                 if(actionId == EditorInfo.IME_ACTION_DONE){
+
                     String userInput = busBox.getText().toString();
-                    if(userInput.isEmpty())
+
+                    if(userInput.isEmpty()) {
                         Toast.makeText(getApplicationContext(), "Enter a bus number", Toast.LENGTH_SHORT).show();
-                    else
-                        new GeocodeTask(cxt).execute(latitude, longitude, userInput);
+                        return false;
+                    }
+
+                    if(!address_selected) {
+                        Toast.makeText(getApplicationContext(), "Pick a destination", Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+
+                    new GeocodeTask(cxt).execute(latitude, longitude, userInput);
                 }
+
                 return false;
             }
         });
+
         Button submit = (Button) findViewById(R.id.submit);
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,7 +110,6 @@ public class AddressSelectionPage extends ListActivity {
             }
         });
     }
-
 
     private class GeocodeTask extends AsyncTask<String, Void, List<BusStop>> {
 
