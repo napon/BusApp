@@ -137,7 +137,7 @@ public class MainPage extends Activity{
         @Override
         protected List<Location> doInBackground(String... locationName) {
             String request = locationName[0].replace(' ', '+');
-            String query = server.makeJSONQuery("https://maps.googleapis.com/maps/api/geocode/json?address=" + request + "&region=ca&key=" + API_KEY);
+            String query = server.makeJSONQuery("https://maps.googleapis.com/maps/api/geocode/json?address=" + request + "&key=" + API_KEY);
             return server.parseJSONLocationData(query);
         }
 
