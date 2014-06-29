@@ -24,50 +24,13 @@
             android:layout_marginTop="25dp"
             android:layout_marginLeft="40dip"
             android:layout_marginRight="40dip"
-            android:layout_marginBottom="200dp"
+            android:layout_marginBottom="100dip"
             android:divider="@color/grey"
-            android:dividerHeight="1dp"
+            android:dividerHeight="1px"
             android:listSelector="@color/grey"
             android:visibility="visible"
             android:background="@drawable/rounded_corners"
             android:layout_below="@+id/selection_title"
             android:layout_alignParentBottom="true"/>
-
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Which bus are you on?"
-            android:id="@+id/input_bus"
-            android:layout_alignParentBottom="true" android:layout_centerHorizontal="true"
-            android:layout_marginBottom="150dip"/>
-    <EditText
-            android:layout_width="80dip"
-            android:layout_height="40dip"
-            android:inputType="number"
-            android:ems="3"
-            android:layout_weight="1"
-            android:singleLine="true"
-            android:background="@color/white"
-            android:textColor="@color/black"
-            android:textCursorDrawable="@drawable/cursor"
-            android:textAlignment="center"
-            android:hint="###"
-            android:paddingLeft="25dp"
-            android:textSize="7pt"
-            android:id="@+id/bus_stop"
-            android:layout_alignBottom="@+id/submit" android:layout_alignStart="@+id/selection_title"/>
-    <Button
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="40dip"
-            android:textSize="7pt"
-            android:text="Find a stop"
-            android:id="@+id/submit"
-            android:padding="10dip"
-            android:layout_alignTop="@+id/input_bus" android:layout_alignEnd="@+id/input_bus"
-            android:layout_marginTop="40dip"
-            android:background="@color/dark_grey"/>
-
 
 </RelativeLayout>

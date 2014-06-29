@@ -3,7 +3,6 @@ package com.napontaratan.BusApp.view;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.PowerManager;
 import android.os.Vibrator;
 import android.view.View;
 import android.view.Window;
@@ -32,7 +31,7 @@ public class AlarmView extends Activity {
         setContentView(R.layout.alarm);
 
         TextView text = (TextView) findViewById(R.id.alarm_dialog);
-        text.setText("Approaching stop: " + getIntent().getStringExtra("location_name"));
+        text.setText("Approaching bus stop!");
 
         final Vibrator vibrator;
         vibrator = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);

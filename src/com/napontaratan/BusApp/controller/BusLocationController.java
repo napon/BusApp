@@ -27,9 +27,9 @@ public class BusLocationController {
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
     }
 
-    public void startListening(final double destination_lat, final double destination_lon, final String location_name) {
+    public void startListening(final double destination_lat, final double destination_lon) {
         stopListening();
-        listener = new BusLocationListener( destination_lat, destination_lon, location_name);
+        listener = new BusLocationListener( destination_lat, destination_lon);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 100, listener);
         activated = true;
     }
@@ -49,12 +49,12 @@ public class BusLocationController {
 
         private double destination_lat;
         private double destination_lon;
-        private String location_name;
 
-        public BusLocationListener(double lat, double lon, String name) {
+
+        public BusLocationListener(double lat, double lon) {
             this.destination_lat = lat;
             this.destination_lon = lon;
-            this.location_name = name;
+
         }
 
         @Override
@@ -70,7 +70,6 @@ public class BusLocationController {
                 System.out.println("**** in bound ****");
                 locationManager.removeUpdates(this);
                 Intent intent = new Intent(context, AlarmReceiver.class);
-                intent.putExtra("location_name", location_name);
                 final PendingIntent pi = PendingIntent.getBroadcast(context, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
                 alarmManager.set(AlarmManager.RTC_WAKEUP, 1, pi);
             }

@@ -150,4 +150,10 @@ public class MainPage extends Activity{
                 startActivity(new Intent("com.napontaratan.SELECTION"));
         }
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        finish();
+    }
 }
