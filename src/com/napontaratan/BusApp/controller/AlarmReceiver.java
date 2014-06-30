@@ -11,11 +11,9 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        System.out.println("AlarmReceiver activated!");
         Intent alarm = new Intent("com.napontaratan.ALARM");
         alarm.putExtra("location_name", intent.getStringExtra("location_name"));
         alarm.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
         context.startActivity(alarm);
     }
 }

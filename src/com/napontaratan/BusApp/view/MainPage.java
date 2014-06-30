@@ -143,7 +143,7 @@ public class MainPage extends Activity{
 
         @Override
         protected void onPostExecute(List <Location> locations) {
-            dialog.hide();
+            dialog.dismiss();
             if(locations == null || locations.size() == 0)
                 Toast.makeText(getApplicationContext(), "No location found. Please make sure an internet connection is available and the address is correct.", Toast.LENGTH_SHORT).show();
             else

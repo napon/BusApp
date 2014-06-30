@@ -48,14 +48,11 @@ public class AddressSelectionPage extends ListActivity {
         ListView lv = this.getListView();
         lv.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        	
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                for(int i = 0; i < parent.getCount(); i++){
-                    View v = parent.getChildAt(i);
-                    v.setBackgroundColor(Color.WHITE);
-                }
-
-                view.setBackgroundColor(Color.GRAY);
+                view.setSelected(true);
+                
                 Location loc = locations.get(position);
                 latitude = String.valueOf(loc.getLatitude());
                 longitude = String.valueOf(loc.getLongitude());

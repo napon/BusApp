@@ -62,10 +62,11 @@ public class BusLocationController {
 
             double currentLat = location.getLatitude();
             double currentLon = location.getLongitude();
-            System.out.println("checked");
+            
             float[] results = new float[1];
+            
             Location.distanceBetween(destination_lat,destination_lon,currentLat,currentLon,results);
-            System.out.println("radius to destination = " + results[0]);
+          
             if(results[0] <= 500) {
                 System.out.println("**** in bound ****");
                 locationManager.removeUpdates(this);

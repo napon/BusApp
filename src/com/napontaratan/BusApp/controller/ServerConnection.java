@@ -54,16 +54,14 @@ public class ServerConnection {
         try {
             JSONTokener raw 	    = new JSONTokener(response);
             JSONObject jsonObject	= new JSONObject(raw);
+            
             String status = jsonObject.getString("status");
-            System.out.print("status: " + status);
-
             if(!status.equals("OK")) return null;
 
             JSONArray results = jsonObject.getJSONArray("results");
             for(int i = 0; i < results.length(); i++) {
                 JSONObject obj = (JSONObject) results.get(i);
                 String address = obj.getString("formatted_address");
-                System.out.println(address);
                 JSONObject location = obj.getJSONObject("geometry").getJSONObject("location");
 
                 double lat = round(location.getDouble("lat"), 6);
@@ -99,14 +97,12 @@ public class ServerConnection {
     public String makeJSONQuery(String server) {
 
         String responseString = null;
-        System.out.println(server);
-
+        
         try {
             Log.d("makeJSONQuery", "make JSON query to server");
             HttpClient httpClient = new DefaultHttpClient();
             HttpResponse response = httpClient.execute(new HttpGet(server));
             responseString = new BasicResponseHandler().handleResponse(response);
-            System.out.println(responseString);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
