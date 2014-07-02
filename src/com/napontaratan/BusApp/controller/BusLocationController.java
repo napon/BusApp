@@ -31,6 +31,7 @@ public class BusLocationController {
         stopListening();
         listener = new BusLocationListener( destination_lat, destination_lon);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 5000, 100, listener);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 5000, 100, listener);
         activated = true;
     }
 
